@@ -1,0 +1,478 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		039E380BAC6D0D51852DB568 /* DeviceCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ACE15201EAB7BDAA7FFE0CE /* DeviceCardCell.swift */; };
+		095FF909ACE304B30F0BF03A /* IconFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43260D837384A4FAB2953D9F /* IconFactory.swift */; };
+		11355B68EF56BA2C979E123F /* MyAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8206A4DA84D40279C9C143 /* MyAccountViewController.swift */; };
+		143084BE70777E674CD2ADDF /* SideMenuContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93CDC255CCE131D4073ED4B7 /* SideMenuContainerViewController.swift */; };
+		1C1740835C1C9A76D623AB13 /* Starscream in Frameworks */ = {isa = PBXBuildFile; productRef = 7504EEE7A76665D37677AFA1 /* Starscream */; };
+		2927A1A7704D4614F9BB6634 /* FanSyncPinwheelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E332E158EF198C481A03FD5 /* FanSyncPinwheelView.swift */; };
+		521CEA6C9CC3F0821216EF2B /* FanSyncWebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98544BB371D305BC4EA0F96 /* FanSyncWebSocket.swift */; };
+		52AAA0CCC27E21FA4621EED4 /* FanSyncStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16995C61FFE2EDD5040C8EF /* FanSyncStore.swift */; };
+		56830E8617519D8B0E38A98C /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860AF00094FCF1FC8EE9091E /* SettingsViewController.swift */; };
+		5A5A6408EC1E898B0D88114B /* DeviceGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9CF58788E37BB0E523FF06 /* DeviceGroup.swift */; };
+		5D5AED4A56BC7E9B88082E59 /* FanSyncCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AEAAE2DFE8D1EFC61001943 /* FanSyncCardView.swift */; };
+		62E516767ECFC8B21FB55D60 /* DeviceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A2EC3725ED8B0FAA79563AA /* DeviceListViewController.swift */; };
+		6957F99A79DA7CBE68FC3D1A /* MyGroupsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864899D22B04E5491497BEA9 /* MyGroupsViewController.swift */; };
+		6B1C77CCBE2A6E48E7EC660A /* FanSyncTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F80065A2E713DC642D93864 /* FanSyncTheme.swift */; };
+		6EC42760AA89E6CCDC6313CA /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D02F615452B305F0E7A8A21 /* LoginViewController.swift */; };
+		7C97C28AE157D881581B301F /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3298F633361FE6020D1E0CFB /* Observable.swift */; };
+		7E3A3CE4DD9A6CF954EC9F51 /* DeviceSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F9BF7A70D315F3E9D41EB1 /* DeviceSettingsViewController.swift */; };
+		ACBA57617425B22567917B90 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A482DF1B675571F8726A8F /* RootViewController.swift */; };
+		BA6AAD5B8C283915F11C2D36 /* ScheduleListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A18EB6AFC3BEE9B4C7039E6 /* ScheduleListViewController.swift */; };
+		C0F4750153177207560D7EE7 /* SupportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE721ED0C6AAD41BCCB5A4D /* SupportViewController.swift */; };
+		C300B47E6F12C61FCD87B365 /* FanSyncAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400BAF6E14A2B1EBB31C77E /* FanSyncAPI.swift */; };
+		C5E98D3D4EF9A943B8208499 /* FanSyncSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727601BC9EC64BB29A41E8B1 /* FanSyncSegmentedControl.swift */; };
+		CC8E25F79DA3B4A80BAD87A8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47D48EB55CE43E0DB94899EC /* AppDelegate.swift */; };
+		D2BE889A78F97C1028F3C46F /* MainMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09C89D9402D1C9D665B7BBFD /* MainMenuView.swift */; };
+		E0E266C2A5AC5DFF0F79B881 /* FanSyncModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D96F1EC2F07BDD0A194BB /* FanSyncModels.swift */; };
+		EDF86A7907844682CE2F350F /* CreateScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2572DC197050F6886362EA2 /* CreateScheduleViewController.swift */; };
+		F544E0E2D0F8E21040FD8D16 /* DeviceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC6317399DE71492B63A5ED /* DeviceDetailViewController.swift */; };
+		FE1B842FD102CC3D4106F81E /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B7D222E5AA8009E48BF78D /* KeychainStore.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		09C89D9402D1C9D665B7BBFD /* MainMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuView.swift; sourceTree = "<group>"; };
+		11A482DF1B675571F8726A8F /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
+		1EE721ED0C6AAD41BCCB5A4D /* SupportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportViewController.swift; sourceTree = "<group>"; };
+		3298F633361FE6020D1E0CFB /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
+		3E9CF58788E37BB0E523FF06 /* DeviceGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceGroup.swift; sourceTree = "<group>"; };
+		43260D837384A4FAB2953D9F /* IconFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconFactory.swift; sourceTree = "<group>"; };
+		47D48EB55CE43E0DB94899EC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		4A2EC3725ED8B0FAA79563AA /* DeviceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceListViewController.swift; sourceTree = "<group>"; };
+		4AEAAE2DFE8D1EFC61001943 /* FanSyncCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FanSyncCardView.swift; sourceTree = "<group>"; };
+		5E332E158EF198C481A03FD5 /* FanSyncPinwheelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FanSyncPinwheelView.swift; sourceTree = "<group>"; };
+		6A18EB6AFC3BEE9B4C7039E6 /* ScheduleListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleListViewController.swift; sourceTree = "<group>"; };
+		6A8206A4DA84D40279C9C143 /* MyAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAccountViewController.swift; sourceTree = "<group>"; };
+		6CC6317399DE71492B63A5ED /* DeviceDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDetailViewController.swift; sourceTree = "<group>"; };
+		727601BC9EC64BB29A41E8B1 /* FanSyncSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FanSyncSegmentedControl.swift; sourceTree = "<group>"; };
+		7D02F615452B305F0E7A8A21 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		83BBC837F1ACDE58497B43E9 /* FanSyncNativeUIKit.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = FanSyncNativeUIKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8400BAF6E14A2B1EBB31C77E /* FanSyncAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FanSyncAPI.swift; sourceTree = "<group>"; };
+		860AF00094FCF1FC8EE9091E /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		864899D22B04E5491497BEA9 /* MyGroupsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupsViewController.swift; sourceTree = "<group>"; };
+		93CDC255CCE131D4073ED4B7 /* SideMenuContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuContainerViewController.swift; sourceTree = "<group>"; };
+		9ACE15201EAB7BDAA7FFE0CE /* DeviceCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceCardCell.swift; sourceTree = "<group>"; };
+		9F80065A2E713DC642D93864 /* FanSyncTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FanSyncTheme.swift; sourceTree = "<group>"; };
+		A2572DC197050F6886362EA2 /* CreateScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateScheduleViewController.swift; sourceTree = "<group>"; };
+		B9B7D222E5AA8009E48BF78D /* KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
+		BA57BCCED3E294A27355BCA4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C16995C61FFE2EDD5040C8EF /* FanSyncStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FanSyncStore.swift; sourceTree = "<group>"; };
+		C98544BB371D305BC4EA0F96 /* FanSyncWebSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FanSyncWebSocket.swift; sourceTree = "<group>"; };
+		F0F9BF7A70D315F3E9D41EB1 /* DeviceSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSettingsViewController.swift; sourceTree = "<group>"; };
+		F30D96F1EC2F07BDD0A194BB /* FanSyncModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FanSyncModels.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E8AB7ACF9B59CA8B10DDD299 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1C1740835C1C9A76D623AB13 /* Starscream in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		015DE46E031CE8FE0C699CB3 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				A2572DC197050F6886362EA2 /* CreateScheduleViewController.swift */,
+				6CC6317399DE71492B63A5ED /* DeviceDetailViewController.swift */,
+				4A2EC3725ED8B0FAA79563AA /* DeviceListViewController.swift */,
+				F0F9BF7A70D315F3E9D41EB1 /* DeviceSettingsViewController.swift */,
+				7D02F615452B305F0E7A8A21 /* LoginViewController.swift */,
+				6A8206A4DA84D40279C9C143 /* MyAccountViewController.swift */,
+				864899D22B04E5491497BEA9 /* MyGroupsViewController.swift */,
+				11A482DF1B675571F8726A8F /* RootViewController.swift */,
+				6A18EB6AFC3BEE9B4C7039E6 /* ScheduleListViewController.swift */,
+				860AF00094FCF1FC8EE9091E /* SettingsViewController.swift */,
+				93CDC255CCE131D4073ED4B7 /* SideMenuContainerViewController.swift */,
+				1EE721ED0C6AAD41BCCB5A4D /* SupportViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		40E51E8DB147A027C558C19D /* FanSyncNativeUIKit */ = {
+			isa = PBXGroup;
+			children = (
+				BA57BCCED3E294A27355BCA4 /* Info.plist */,
+				F1F4CF127B186995503D5946 /* App */,
+				70C52EEBC5C4656D2D0119B0 /* Models */,
+				E012B4655125BC55A348F6AE /* Networking */,
+				AFCFF95E9E73843A9DAFC559 /* Storage */,
+				015DE46E031CE8FE0C699CB3 /* ViewControllers */,
+				F7F3D022B8BB4D03AD8A43FE /* Views */,
+			);
+			path = FanSyncNativeUIKit;
+			sourceTree = "<group>";
+		};
+		4A446FAC604C79534FC0C301 = {
+			isa = PBXGroup;
+			children = (
+				40E51E8DB147A027C558C19D /* FanSyncNativeUIKit */,
+				A761376B4F38BC57AF486C7D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		70C52EEBC5C4656D2D0119B0 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				3E9CF58788E37BB0E523FF06 /* DeviceGroup.swift */,
+				F30D96F1EC2F07BDD0A194BB /* FanSyncModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A761376B4F38BC57AF486C7D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				83BBC837F1ACDE58497B43E9 /* FanSyncNativeUIKit.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AFCFF95E9E73843A9DAFC559 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				B9B7D222E5AA8009E48BF78D /* KeychainStore.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		E012B4655125BC55A348F6AE /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				8400BAF6E14A2B1EBB31C77E /* FanSyncAPI.swift */,
+				C98544BB371D305BC4EA0F96 /* FanSyncWebSocket.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		F1F4CF127B186995503D5946 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				47D48EB55CE43E0DB94899EC /* AppDelegate.swift */,
+				C16995C61FFE2EDD5040C8EF /* FanSyncStore.swift */,
+				3298F633361FE6020D1E0CFB /* Observable.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		F7F3D022B8BB4D03AD8A43FE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				9ACE15201EAB7BDAA7FFE0CE /* DeviceCardCell.swift */,
+				4AEAAE2DFE8D1EFC61001943 /* FanSyncCardView.swift */,
+				5E332E158EF198C481A03FD5 /* FanSyncPinwheelView.swift */,
+				727601BC9EC64BB29A41E8B1 /* FanSyncSegmentedControl.swift */,
+				9F80065A2E713DC642D93864 /* FanSyncTheme.swift */,
+				43260D837384A4FAB2953D9F /* IconFactory.swift */,
+				09C89D9402D1C9D665B7BBFD /* MainMenuView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		276EEFD72C77A9C0DDA00392 /* FanSyncNativeUIKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DFE803C3D3E6CA1604CE8392 /* Build configuration list for PBXNativeTarget "FanSyncNativeUIKit" */;
+			buildPhases = (
+				A930866215D67096ED512DCF /* Sources */,
+				E8AB7ACF9B59CA8B10DDD299 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FanSyncNativeUIKit;
+			packageProductDependencies = (
+				7504EEE7A76665D37677AFA1 /* Starscream */,
+			);
+			productName = FanSyncNativeUIKit;
+			productReference = 83BBC837F1ACDE58497B43E9 /* FanSyncNativeUIKit.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C65E4204E25327E472213D29 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = 143B958D3DA2F9BFDA3F782B /* Build configuration list for PBXProject "FanSyncNativeUIKit" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 4A446FAC604C79534FC0C301;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				ADC869CF81013364529A0AA0 /* XCRemoteSwiftPackageReference "Starscream" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = A761376B4F38BC57AF486C7D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				276EEFD72C77A9C0DDA00392 /* FanSyncNativeUIKit */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A930866215D67096ED512DCF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CC8E25F79DA3B4A80BAD87A8 /* AppDelegate.swift in Sources */,
+				EDF86A7907844682CE2F350F /* CreateScheduleViewController.swift in Sources */,
+				039E380BAC6D0D51852DB568 /* DeviceCardCell.swift in Sources */,
+				F544E0E2D0F8E21040FD8D16 /* DeviceDetailViewController.swift in Sources */,
+				5A5A6408EC1E898B0D88114B /* DeviceGroup.swift in Sources */,
+				62E516767ECFC8B21FB55D60 /* DeviceListViewController.swift in Sources */,
+				7E3A3CE4DD9A6CF954EC9F51 /* DeviceSettingsViewController.swift in Sources */,
+				C300B47E6F12C61FCD87B365 /* FanSyncAPI.swift in Sources */,
+				5D5AED4A56BC7E9B88082E59 /* FanSyncCardView.swift in Sources */,
+				E0E266C2A5AC5DFF0F79B881 /* FanSyncModels.swift in Sources */,
+				2927A1A7704D4614F9BB6634 /* FanSyncPinwheelView.swift in Sources */,
+				C5E98D3D4EF9A943B8208499 /* FanSyncSegmentedControl.swift in Sources */,
+				52AAA0CCC27E21FA4621EED4 /* FanSyncStore.swift in Sources */,
+				6B1C77CCBE2A6E48E7EC660A /* FanSyncTheme.swift in Sources */,
+				521CEA6C9CC3F0821216EF2B /* FanSyncWebSocket.swift in Sources */,
+				095FF909ACE304B30F0BF03A /* IconFactory.swift in Sources */,
+				FE1B842FD102CC3D4106F81E /* KeychainStore.swift in Sources */,
+				6EC42760AA89E6CCDC6313CA /* LoginViewController.swift in Sources */,
+				D2BE889A78F97C1028F3C46F /* MainMenuView.swift in Sources */,
+				11355B68EF56BA2C979E123F /* MyAccountViewController.swift in Sources */,
+				6957F99A79DA7CBE68FC3D1A /* MyGroupsViewController.swift in Sources */,
+				7C97C28AE157D881581B301F /* Observable.swift in Sources */,
+				ACBA57617425B22567917B90 /* RootViewController.swift in Sources */,
+				BA6AAD5B8C283915F11C2D36 /* ScheduleListViewController.swift in Sources */,
+				56830E8617519D8B0E38A98C /* SettingsViewController.swift in Sources */,
+				143084BE70777E674CD2ADDF /* SideMenuContainerViewController.swift in Sources */,
+				C0F4750153177207560D7EE7 /* SupportViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		4191D976DFB834EE151AA2D7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		4237E4C445F65187050D00EE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FanSyncNativeUIKit/Info.plist;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fansyncnative.uikit;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		9077323BBAE81B3FFE90C312 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		AFE5688125BF31FE733A410F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FanSyncNativeUIKit/Info.plist;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fansyncnative.uikit;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		143B958D3DA2F9BFDA3F782B /* Build configuration list for PBXProject "FanSyncNativeUIKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9077323BBAE81B3FFE90C312 /* Debug */,
+				4191D976DFB834EE151AA2D7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		DFE803C3D3E6CA1604CE8392 /* Build configuration list for PBXNativeTarget "FanSyncNativeUIKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4237E4C445F65187050D00EE /* Debug */,
+				AFE5688125BF31FE733A410F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		ADC869CF81013364529A0AA0 /* XCRemoteSwiftPackageReference "Starscream" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/daltoniam/Starscream.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.6;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7504EEE7A76665D37677AFA1 /* Starscream */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ADC869CF81013364529A0AA0 /* XCRemoteSwiftPackageReference "Starscream" */;
+			productName = Starscream;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = C65E4204E25327E472213D29 /* Project object */;
+}

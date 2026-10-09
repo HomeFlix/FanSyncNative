@@ -1,0 +1,22 @@
+# Xcode
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+xcuserdata/
+DerivedData/
+.DS_Store
+
+# Swift Package Manager
+.build/
+*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
+
+# xcodegen output is regenerated from project.yml / project-uikit.yml,
+# but we keep the generated .xcodeproj checked in for convenience since
+# this isn't a CI pipeline — only user-specific cruft above is excluded.
+
+# Credentials / secrets (never commit these)
+*.xcconfig.local
+.env
+SECRETS.swift
+
+# Simulator / build logs
+*.log
