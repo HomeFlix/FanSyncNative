@@ -91,17 +91,38 @@ If you're asked to wire any of these up for real, the right move is
 re-deriving the wire format from a packet capture of the official app, not
 guessing a request shape.
 
-## Why we're on a second machine
+## IMPORTANT CORRECTION: stay on the iMac, do not move to a Tahoe Mac
 
-The first machine (a 2013 iMac14,2 with an NVIDIA GeForce GTX 780M) turned
-out to have broken Simulator GPU rendering — confirmed via screenshot:
-pure black framebuffer on the iOS Simulator even on the plain Home Screen,
-with no app running, surviving a full simulator erase + CoreSimulatorService
-restart. This is unrelated to iOS 12 or to this app's code; it's a host-level
-graphics problem specific to that aging hardware. See `SETUP_NEW_MACHINE.md`
-in this repo for the full, gotcha-by-gotcha setup process on the new machine,
-written specifically to avoid re-deriving the iOS-12 DeviceSupport trick and
-other things we already solved once.
+A second-machine attempt was tried and reverted. **Do not repeat it.**
+
+The second Mac runs macOS Tahoe 26.6.2, which requires Xcode 26 (or later).
+Confirmed from Apple's own current system requirements and multiple
+independent reports: **Xcode 26+ cannot connect to, pair with, or deploy to
+any physical device running iOS below 15.0 — full stop, not fixable with
+DeviceSupport files or any workaround.** This is a hard floor Apple built
+into the tool starting with Xcode 26, separate from (and stricter than) the
+"recommended minimum" iOS 12 deployment-target support that Xcode 16 still
+has. Since the iPhone 6 and iPad Air are both iOS 12.5.8, a Tahoe machine
+running Xcode 26+ can never be used to deploy to them, no matter what is
+installed on it.
+
+**The iMac (Sequoia, Xcode 16) is the only machine of the two that can
+actually talk to these devices at all.** Its device *pairing* was working
+correctly — `usbmuxd` logged "Successfully paired" for both the iPhone 6 and
+the iPad Air after installing the iOS 12 DeviceSupport files (see below).
+The only confirmed problem there is **broken iOS Simulator GPU rendering**
+(pure black framebuffer, even on the plain Home Screen with no app running,
+surviving a full simulator erase) — which is irrelevant to the actual goal,
+since physical-device testing doesn't require the Simulator to render
+anything at all. The open question when this was last touched: whether
+`devicectl`/Xcode's device list would actually show the paired devices and
+allow a real on-device build+run, independent of the Simulator being broken.
+That was never fully tested to conclusion before the (incorrect) move to a
+second machine — pick up there.
+
+If a genuinely different, less-old Mac becomes available later, the
+requirement is: **must be able to run Xcode 16.x specifically** (not 26+) —
+meaning it must be on macOS Sonoma or Sequoia, not Tahoe.
 
 ## Current status as of this handoff
 
@@ -122,7 +143,21 @@ other things we already solved once.
 
 ## What to do next
 
-Work through `SETUP_NEW_MACHINE.md` in order. Report back what happens at
-each step, especially device pairing (step 6) and what actually renders on
-first launch (step 8) — black screen vs. the eggplant login screen vs.
-anything else.
+**On the iMac** (not a new machine — see correction above): with iOS 12
+DeviceSupport files already installed and devices already pairing
+successfully at the `usbmuxd` level, the next concrete step is checking
+whether `xcrun devicectl list devices` now shows the paired iPhone 6 / iPad
+Air, and if so, attempting a real on-device build+run via Xcode's device
+picker or `xcodebuild -destination 'platform=iOS,name=<device>'`. This
+sidesteps the Simulator entirely, so the broken GPU rendering there should
+not block it. If `devicectl` still doesn't show the device even though
+`usbmuxd` paired successfully, that's a distinct, not-yet-diagnosed problem
+worth investigating on its own (possibly: Xcode's device list also needs the
+device unlocked *and* Xcode's GUI running with focus at query time; try
+opening Xcode's own Window → Devices and Simulators panel directly rather
+than only the command-line tools, since that panel may surface errors the
+CLI doesn't).
+
+`SETUP_NEW_MACHINE.md` in this repo describes a different-machine setup path
+and is only useful again if a genuinely Sonoma/Sequoia-based Mac (not Tahoe)
+becomes available later.

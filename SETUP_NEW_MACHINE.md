@@ -1,11 +1,18 @@
 # FanSyncNative — Setup on a New Mac for iOS 12.5.8 Device Testing
 
+> ⚠️ **DO NOT use this on a Mac running macOS Tahoe (26.x).** Tahoe requires
+> Xcode 26+, and Xcode 26+ **cannot connect to or deploy on any device
+> running iOS below 15.0** — a hard limitation Apple built into the tool, not
+> fixable by anything in this document. This was tried and failed. Only
+> follow this guide on a Mac running **macOS Sonoma or Sequoia** (i.e. one
+> that can install Xcode 16.x). See `CLAUDE_SESSION_CONTEXT.md` for the full
+> story — the recommended path is actually fixing the *original* iMac
+> (Sequoia + Xcode 16, where device pairing was already working), not moving
+> to a third machine.
+
 **Objective:** deploy and test `FanSyncNativeUIKit` on a physical iPhone 6 and a
-1st-generation iPad Air, both running iOS 12.5.8. This doc exists because the
-previous machine (a 2013 iMac) turned out to have broken Simulator GPU
-rendering — unrelated to iOS 12 at all — so we're starting fresh here. Every
-step below is written specifically to avoid the other gotchas we *did* hit
-that genuinely are about iOS 12 compatibility.
+1st-generation iPad Air, both running iOS 12.5.8. Every step below is written
+specifically to avoid the iOS-12-compatibility gotchas already hit once.
 
 Read this whole document before running anything — the order matters.
 
