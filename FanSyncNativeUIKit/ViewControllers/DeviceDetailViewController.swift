@@ -19,6 +19,8 @@ final class DeviceDetailViewController: UIViewController {
     private let directionControl = FanSyncSegmentedControl(options: ["Forward", "Reverse"])
     private let lightSwitch = UISwitch()
     private let lightStatusLabel = UILabel()
+    private let lightPercentLabel = UILabel()
+    private let lightSlider = UISlider()
     private let homeAwaySwitch = UISwitch()
     private let homeAwayStatusLabel = UILabel()
 
@@ -87,16 +89,17 @@ final class DeviceDetailViewController: UIViewController {
         ])
 
         // Title row
-        let pinwheel = FanSyncPinwheelView()
-        pinwheel.color = FanSyncTheme.eggplant
-        pinwheel.translatesAutoresizingMaskIntoConstraints = false
-        pinwheel.widthAnchor.constraint(equalToConstant: 36).isActive = true
-        pinwheel.heightAnchor.constraint(equalToConstant: 36).isActive = true
+        let fanIconView = UIImageView(image: UIImage(named: "FanIcon")?.withRenderingMode(.alwaysTemplate))
+        fanIconView.tintColor = FanSyncTheme.onLabel
+        fanIconView.contentMode = .scaleAspectFit
+        fanIconView.translatesAutoresizingMaskIntoConstraints = false
+        fanIconView.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        fanIconView.heightAnchor.constraint(equalToConstant: 37).isActive = true
 
         nameLabel.font = .systemFont(ofSize: 28, weight: .regular)
         nameLabel.textColor = FanSyncTheme.onLabel
 
-        let titleRow = UIStackView(arrangedSubviews: [pinwheel, nameLabel])
+        let titleRow = UIStackView(arrangedSubviews: [fanIconView, nameLabel])
         titleRow.axis = .horizontal
         titleRow.spacing = 14
         titleRow.alignment = .center
@@ -109,13 +112,8 @@ final class DeviceDetailViewController: UIViewController {
         powerSwitch.addTarget(self, action: #selector(powerChanged), for: .valueChanged)
         percentLabel.font = .systemFont(ofSize: 20, weight: .semibold)
         percentLabel.textColor = FanSyncTheme.onLabel
-        let percentPinwheel = FanSyncPinwheelView()
-        percentPinwheel.color = FanSyncTheme.secondaryLabel
-        percentPinwheel.translatesAutoresizingMaskIntoConstraints = false
-        percentPinwheel.widthAnchor.constraint(equalToConstant: 18).isActive = true
-        percentPinwheel.heightAnchor.constraint(equalToConstant: 18).isActive = true
 
-        let powerRow = UIStackView(arrangedSubviews: [powerSwitch, onOffLabel, UIView(), percentLabel, percentPinwheel])
+        let powerRow = UIStackView(arrangedSubviews: [powerSwitch, onOffLabel, UIView(), percentLabel])
         powerRow.axis = .horizontal
         powerRow.spacing = 8
         powerRow.alignment = .center
@@ -145,11 +143,23 @@ final class DeviceDetailViewController: UIViewController {
         lightSwitch.addTarget(self, action: #selector(lightChanged), for: .valueChanged)
         lightStatusLabel.font = .systemFont(ofSize: 20, weight: .bold)
         lightStatusLabel.textColor = FanSyncTheme.onLabel
-        let lightRow = UIStackView(arrangedSubviews: [sectionLabel("Light"), UIView(), lightStatusLabel, lightSwitch])
+        lightPercentLabel.font = .systemFont(ofSize: 20, weight: .semibold)
+        lightPercentLabel.textColor = FanSyncTheme.onLabel
+        let lightRow = UIStackView(arrangedSubviews: [sectionLabel("Light"), UIView(), lightPercentLabel, lightStatusLabel, lightSwitch])
         lightRow.axis = .horizontal
         lightRow.spacing = 8
         lightRow.alignment = .center
         contentStack.addArrangedSubview(lightRow)
+
+        // Dimming slider — hidden entirely for fixtures that don't support it
+        // (FanDevice.hidesLightDimmer, from the real app's hideLightDimmer device
+        // property), matching the real app rather than showing a slider that would
+        // silently do nothing.
+        lightSlider.minimumValue = 0
+        lightSlider.maximumValue = 100
+        lightSlider.tintColor = FanSyncTheme.eggplant
+        lightSlider.addTarget(self, action: #selector(lightPercentChanged), for: .valueChanged)
+        contentStack.addArrangedSubview(lightSlider)
         contentStack.addArrangedSubview(divider())
 
         // Home away
@@ -202,8 +212,21 @@ final class DeviceDetailViewController: UIViewController {
         directionControl.setSelectedIndex(device.fanDirection == .reverse ? 1 : 0)
         lightSwitch.setOn(device.lightPower, animated: false)
         lightStatusLabel.text = device.lightPower ? "ON" : "OFF"
+        lightSlider.isHidden = device.hidesLightDimmer
+        lightPercentLabel.isHidden = device.hidesLightDimmer
+        lightPercentLabel.text = "\(device.lightPercent)%"
+        lightSlider.value = Float(device.lightPercent)
         homeAwaySwitch.setOn(device.homeAway, animated: false)
         homeAwayStatusLabel.text = device.homeAway ? "ON" : "OFF"
+
+        // See DeviceCardCell.configure for the same rules: unreachable devices gray
+        // out power/speed, and Fresh Air mode disables the speed slider specifically.
+        powerSwitch.isEnabled = device.isConnected
+        speedSlider.isEnabled = device.isConnected && device.fanMode != .freshAir
+        breezeControl.isEnabled = device.isConnected
+        directionControl.isEnabled = device.isConnected
+        lightSwitch.isEnabled = device.isConnected
+        lightSlider.isEnabled = device.isConnected
     }
 
     @objc private func closeTapped() {
@@ -233,6 +256,11 @@ final class DeviceDetailViewController: UIViewController {
     @objc private func lightChanged() {
         guard let device else { return }
         store.setLightPower(device, on: lightSwitch.isOn)
+    }
+
+    @objc private func lightPercentChanged() {
+        guard let device else { return }
+        store.setLightPercent(device, percent: Int(lightSlider.value))
     }
 
     @objc private func homeAwayChanged() {

@@ -4,11 +4,10 @@ final class DeviceCardCell: UITableViewCell {
     static let reuseId = "DeviceCardCell"
 
     private let card = FanSyncCardView()
-    private let pinwheel = FanSyncPinwheelView()
+    private let fanIconView = UIImageView(image: UIImage(named: "FanIcon")?.withRenderingMode(.alwaysTemplate))
     private let nameLabel = UILabel()
     private let onOffLabel = UILabel()
     private let percentLabel = UILabel()
-    private let smallPinwheel = FanSyncPinwheelView()
     private let powerSwitch = UISwitch()
     private let speedSlider = UISlider()
     private let moreControlsButton = FanSyncBarButton(title: "More Controls")
@@ -36,26 +35,19 @@ final class DeviceCardCell: UITableViewCell {
             card.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
         ])
 
-        // Row 1: icon + name
-        let iconBackground = UIView()
-        iconBackground.backgroundColor = UIColor(red: 0.75, green: 0.8, blue: 0.95, alpha: 0.5)
-        iconBackground.layer.cornerRadius = 24
-        iconBackground.translatesAutoresizingMaskIntoConstraints = false
-        pinwheel.translatesAutoresizingMaskIntoConstraints = false
-        iconBackground.addSubview(pinwheel)
+        // Row 1: icon + name (no background circle — plain glyph, matches the real app)
+        fanIconView.tintColor = FanSyncTheme.onLabel
+        fanIconView.contentMode = .scaleAspectFit
+        fanIconView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            iconBackground.widthAnchor.constraint(equalToConstant: 48),
-            iconBackground.heightAnchor.constraint(equalToConstant: 48),
-            pinwheel.centerXAnchor.constraint(equalTo: iconBackground.centerXAnchor),
-            pinwheel.centerYAnchor.constraint(equalTo: iconBackground.centerYAnchor),
-            pinwheel.widthAnchor.constraint(equalToConstant: 26),
-            pinwheel.heightAnchor.constraint(equalToConstant: 26)
+            fanIconView.widthAnchor.constraint(equalToConstant: 48),
+            fanIconView.heightAnchor.constraint(equalToConstant: 44)
         ])
 
-        nameLabel.font = .systemFont(ofSize: 20, weight: .medium)
+        nameLabel.font = .systemFont(ofSize: 22, weight: .regular)
         nameLabel.textColor = FanSyncTheme.onLabel
 
-        let nameRow = UIStackView(arrangedSubviews: [iconBackground, nameLabel, UIView()])
+        let nameRow = UIStackView(arrangedSubviews: [fanIconView, nameLabel, UIView()])
         nameRow.axis = .horizontal
         nameRow.spacing = 14
         nameRow.alignment = .center
@@ -63,23 +55,20 @@ final class DeviceCardCell: UITableViewCell {
         nameRow.layoutMargins = UIEdgeInsets(top: 16, left: 16, bottom: 0, right: 16)
 
         // Row 2: status
-        onOffLabel.font = .systemFont(ofSize: 15, weight: .bold)
+        onOffLabel.font = .systemFont(ofSize: 17, weight: .bold)
         onOffLabel.textColor = FanSyncTheme.onLabel
-        percentLabel.font = .systemFont(ofSize: 15, weight: .semibold)
+        percentLabel.font = .systemFont(ofSize: 17, weight: .bold)
         percentLabel.textColor = FanSyncTheme.onLabel
-        smallPinwheel.color = FanSyncTheme.secondaryLabel
 
-        let statusRow = UIStackView(arrangedSubviews: [onOffLabel, UIView(), percentLabel, smallPinwheel])
+        let statusRow = UIStackView(arrangedSubviews: [onOffLabel, UIView(), percentLabel])
         statusRow.axis = .horizontal
         statusRow.alignment = .center
         statusRow.spacing = 8
         statusRow.isLayoutMarginsRelativeArrangement = true
-        statusRow.layoutMargins = UIEdgeInsets(top: 10, left: 16, bottom: 0, right: 16)
-        smallPinwheel.widthAnchor.constraint(equalToConstant: 16).isActive = true
-        smallPinwheel.heightAnchor.constraint(equalToConstant: 16).isActive = true
+        statusRow.layoutMargins = UIEdgeInsets(top: 14, left: 16, bottom: 0, right: 16)
 
         // Row 3: toggle + slider
-        powerSwitch.onTintColor = FanSyncTheme.accent
+        powerSwitch.onTintColor = FanSyncTheme.eggplant
         powerSwitch.addTarget(self, action: #selector(powerChanged), for: .valueChanged)
         speedSlider.minimumValue = 0
         speedSlider.maximumValue = 100
@@ -111,6 +100,17 @@ final class DeviceCardCell: UITableViewCell {
         percentLabel.text = "\(device.fanPercent)%"
         powerSwitch.setOn(device.fanPower, animated: false)
         speedSlider.value = Float(device.fanPercent)
+
+        // Physically unreachable devices (powered off at the switch) gray out the
+        // power toggle and speed slider, matching the real app — confirmed via packet
+        // capture: the server's top-level `connected` field flips to 0, and controls
+        // that would send a `set` to an unreachable device are disabled rather than
+        // appearing to work and silently doing nothing.
+        powerSwitch.isEnabled = device.isConnected
+        // Fresh Air mode disables the speed slider in the real app (observed
+        // behavior — the fan runs its own variable pattern in this mode rather than a
+        // fixed user-set speed).
+        speedSlider.isEnabled = device.isConnected && device.fanMode != .freshAir
     }
 
     @objc private func powerChanged() {

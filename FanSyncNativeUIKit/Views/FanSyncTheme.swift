@@ -8,4 +8,9 @@ enum FanSyncTheme {
     static let screenBackground = UIColor(red: 0.90, green: 0.90, blue: 0.92, alpha: 1)
     static let onLabel = UIColor.black.withAlphaComponent(0.85)
     static let secondaryLabel = UIColor.black.withAlphaComponent(0.45)
+
+    // Login screen (white background, matches the real app's auth flow)
+    static let fieldUnderline = UIColor.black.withAlphaComponent(0.15)
+    static let fieldLabel = UIColor.black.withAlphaComponent(0.65)
+    static let fieldText = UIColor.black.withAlphaComponent(0.9)
 }

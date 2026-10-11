@@ -11,11 +11,21 @@ final class FanSyncWebSocket: WebSocketDelegate {
     private var nextId = 1
     private var pending: [Int: (Result<Data, Error>) -> Void] = [:]
     private var pendingTimeouts: [Int: DispatchWorkItem] = [:]
+    /// TEMPORARY diagnostic: last few raw frames received, surfaced in timeout errors
+    /// so a hung request's cause is visible in the UI without needing device console
+    /// access. Remove once WebSocket response decoding is confirmed solid.
+    private var recentRawFrames: [String] = []
 
     /// Fired once the socket is open and ready for `login(token:)`.
     var onConnected: (() -> Void)?
-    /// Fired for unsolicited device_change events pushed by the server.
-    var onDeviceChange: ((String, [String: Int]) -> Void)?
+    /// Fired for unsolicited device_change events pushed by the server. `connected` is
+    /// non-nil only when the push specifically reported a connectivity change (its own
+    /// separate event shape, not bundled with status field changes — see
+    /// DeviceChangeEvent.Changes).
+    var onDeviceChange: ((String, [String: Int]?, Int?) -> Void)?
+    /// Fired for unsolicited set_group events pushed by the server (e.g. from another
+    /// connected session changing group membership/name).
+    var onGroupChange: ((GetGroupResponse.GroupData) -> Void)?
     /// Fired when the socket drops unexpectedly (not via an explicit disconnect()).
     var onDisconnect: ((Error?) -> Void)?
 
@@ -29,7 +39,24 @@ final class FanSyncWebSocket: WebSocketDelegate {
     func connect() {
         var request = URLRequest(url: Self.apiURL)
         request.timeoutInterval = 10
-        let socket = WebSocket(request: request)
+        // Use Starscream's default TCPTransport (Network.framework/NWConnection
+        // based) rather than FoundationTransport. Root-caused via a physical
+        // device console log capture (iOS 12.5.8): FoundationTransport's raw
+        // CFStream socket genuinely connects and completes TLS every time, but
+        // its StreamDelegate.stream(_:handle:) only broadcasts .connected when
+        // the .openCompleted callback fires for the INPUT stream specifically
+        // (FoundationTransport.swift:191-209) — and on this device that
+        // callback is never delivered for the input stream, so Starscream never
+        // advances past "socket open" to actually write the HTTP Upgrade
+        // request (confirmed: zero write/read activity on the socket for the
+        // rest of a 15s window, vs. full round-trip activity on the parallel
+        // REST/URLSession connection in the same log). This is the same
+        // Swift-StreamDelegate/CFStream real-device unreliability we
+        // independently found and fixed in our own (now-removed)
+        // RawStreamDiagnostic. TCPTransport avoids CFStream/StreamDelegate
+        // entirely, so it isn't subject to this failure mode.
+        let engine = WSEngine(transport: TCPTransport(), certPinner: FoundationSecurity())
+        let socket = WebSocket(request: request, engine: engine)
         socket.delegate = self
         self.socket = socket
         socket.connect()
@@ -94,10 +121,69 @@ final class FanSyncWebSocket: WebSocketDelegate {
     /// reference implementation; state changes arrive via the device_change push instead.
     func setDevice(_ deviceId: String, fields: [FanField: Int]) {
         let id = allocateId()
-        var data: [String: String] = [:]
-        for (field, value) in fields { data[field.rawValue] = String(value) }
+        var data: [String: Int] = [:]
+        for (field, value) in fields { data[field.rawValue] = value }
         let req = SetDeviceWSRequest(id: id, device: deviceId, data: data)
         send(req)
+    }
+
+    func listGroups(completion: @escaping (Result<[String], Error>) -> Void) {
+        let id = allocateId()
+        let req = ListGroupsWSRequest(id: id)
+        sendAndAwait(req, id: id) { result in
+            switch result {
+            case .failure(let error): completion(.failure(error))
+            case .success(let data):
+                do {
+                    let resp = try JSONDecoder().decode(ListGroupsResponse.self, from: data)
+                    completion(.success(resp.data))
+                } catch {
+                    completion(.failure(FanSyncError.decodeFailed(error.localizedDescription)))
+                }
+            }
+        }
+    }
+
+    func getGroup(name: String, completion: @escaping (Result<GetGroupResponse.GroupData, Error>) -> Void) {
+        let id = allocateId()
+        let req = GetGroupWSRequest(id: id, data: .init(name: name))
+        sendAndAwait(req, id: id) { result in
+            switch result {
+            case .failure(let error): completion(.failure(error))
+            case .success(let data):
+                do {
+                    let resp = try JSONDecoder().decode(GetGroupResponse.self, from: data)
+                    completion(.success(resp.data))
+                } catch {
+                    completion(.failure(FanSyncError.decodeFailed(error.localizedDescription)))
+                }
+            }
+        }
+    }
+
+    /// Sends the FULL resulting device list for the group (see SetGroupWSRequest) —
+    /// callers must read the current membership first and pass the complete updated
+    /// array, matching the real app's exact update pattern.
+    func setGroup(name: String, devices: [String], displayName: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let id = allocateId()
+        let req = SetGroupWSRequest(id: id, data: .init(name: name, devices: devices, properties: .init(displayName: displayName)))
+        sendAndAwait(req, id: id) { result in
+            switch result {
+            case .failure(let error): completion(.failure(error))
+            case .success: completion(.success(()))
+            }
+        }
+    }
+
+    func deleteGroup(name: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let id = allocateId()
+        let req = DeleteGroupWSRequest(id: id, data: .init(name: name))
+        sendAndAwait(req, id: id) { result in
+            switch result {
+            case .failure(let error): completion(.failure(error))
+            case .success: completion(.success(()))
+            }
+        }
     }
 
     func disconnect() {
@@ -129,7 +215,8 @@ final class FanSyncWebSocket: WebSocketDelegate {
         let timeoutWork = DispatchWorkItem { [weak self] in
             guard let self, let callback = self.pending.removeValue(forKey: id) else { return }
             self.pendingTimeouts.removeValue(forKey: id)
-            callback(.failure(FanSyncError.requestTimedOut))
+            let framesDump = self.recentRawFrames.joined(separator: "\n---\n")
+            callback(.failure(FanSyncError.requestTimedOut2(framesDump)))
         }
         pendingTimeouts[id] = timeoutWork
         DispatchQueue.main.asyncAfter(deadline: .now() + timeout, execute: timeoutWork)
@@ -181,13 +268,25 @@ final class FanSyncWebSocket: WebSocketDelegate {
     }
 
     private func handle(_ text: String) {
+        recentRawFrames.append(text)
+        if recentRawFrames.count > 5 { recentRawFrames.removeFirst() }
+
         guard let data = text.data(using: .utf8) else { return }
         guard let envelope = try? JSONDecoder().decode(WSEnvelope.self, from: data) else { return }
 
         if let event = envelope.event, event == "device_change" {
             if let change = try? JSONDecoder().decode(DeviceChangeEvent.self, from: data) {
                 DispatchQueue.main.async { [weak self] in
-                    self?.onDeviceChange?(change.data.device, change.data.changes.status)
+                    self?.onDeviceChange?(change.data.device, change.data.changes.status, change.data.changes.connected)
+                }
+            }
+            return
+        }
+
+        if let event = envelope.event, event == "set_group" {
+            if let change = try? JSONDecoder().decode(GroupChangeEvent.self, from: data) {
+                DispatchQueue.main.async { [weak self] in
+                    self?.onGroupChange?(change.data)
                 }
             }
             return

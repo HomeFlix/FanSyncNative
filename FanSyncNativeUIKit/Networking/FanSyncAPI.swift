@@ -4,6 +4,7 @@ enum FanSyncError: Error, LocalizedError {
     case authFailed(String)
     case notConnected
     case requestTimedOut
+    case requestTimedOut2(String) // TEMPORARY: timeout + recent raw WS frames for diagnosis
     case decodeFailed(String)
     case serverError(String)
 
@@ -12,6 +13,7 @@ enum FanSyncError: Error, LocalizedError {
         case .authFailed(let msg): return "Login failed: \(msg)"
         case .notConnected: return "Not connected to FanSync"
         case .requestTimedOut: return "Request timed out"
+        case .requestTimedOut2(let frames): return "Request timed out. Recent frames:\n\(frames)"
         case .decodeFailed(let msg): return "Failed to parse response: \(msg)"
         case .serverError(let msg): return "Server error: \(msg)"
         }
@@ -33,10 +35,16 @@ final class FanSyncHTTPClient {
     }
 
     /// POST /api:1/session — exchanges email/password for a long-lived bearer JWT.
+    ///
+    /// Headers match the reference Python client exactly: `Content-Type` and `charset`
+    /// are sent as two separate header fields (not combined as
+    /// `application/json; charset=utf-8`), because Exosite's backend was observed to
+    /// reject requests missing this exact shape with an HTTP 400.
     func login(email: String, password: String, completion: @escaping (Result<(userId: Int, token: String), Error>) -> Void) {
         var request = URLRequest(url: Self.baseURL.appendingPathComponent("api:1/session"))
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("utf-8", forHTTPHeaderField: "charset")
 
         do {
             request.httpBody = try JSONEncoder().encode(SessionLoginRequest(email: email, password: password))
@@ -62,9 +70,11 @@ final class FanSyncHTTPClient {
 
             do {
                 let decoded = try JSONDecoder().decode(SessionLoginResponse.self, from: data)
-                DispatchQueue.main.async { completion(.success((decoded.id, decoded.token))) }
+                DispatchQueue.main.async { completion(.success((decoded.id.value, decoded.token))) }
             } catch {
-                DispatchQueue.main.async { completion(.failure(FanSyncError.decodeFailed(error.localizedDescription))) }
+                DispatchQueue.main.async {
+                    completion(.failure(FanSyncError.decodeFailed(error.localizedDescription)))
+                }
             }
         }.resume()
     }

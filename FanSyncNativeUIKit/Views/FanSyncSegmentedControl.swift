@@ -47,12 +47,20 @@ final class FanSyncSegmentedControl: UIControl {
     }
 
     @objc private func tapped(_ sender: UIButton) {
+        guard isEnabled else { return }
         selectedIndex = sender.tag
         updateAppearance()
         sendActions(for: .valueChanged)
     }
 
+    // UIControl.isEnabled alone doesn't visually affect custom subviews — dim the
+    // buttons and gate taps explicitly (see `tapped(_:)`'s guard above).
+    override var isEnabled: Bool {
+        didSet { updateAppearance() }
+    }
+
     private func updateAppearance() {
+        alpha = isEnabled ? 1.0 : 0.4
         for button in buttons {
             let selected = button.tag == selectedIndex
             button.setTitleColor(selected ? .white : FanSyncTheme.secondaryLabel, for: .normal)

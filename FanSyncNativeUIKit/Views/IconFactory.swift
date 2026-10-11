@@ -47,6 +47,19 @@ enum IconFactory {
         }
     }
 
+    static func chevronDown(size: CGFloat = 16) -> UIImage {
+        render(size: size) { ctx, rect in
+            let lineWidth = rect.width * 0.14
+            ctx.setLineWidth(lineWidth)
+            ctx.setLineCap(.round)
+            ctx.setLineJoin(.round)
+            ctx.move(to: CGPoint(x: rect.minX + rect.width * 0.15, y: rect.minY + rect.height * 0.3))
+            ctx.addLine(to: CGPoint(x: rect.midX, y: rect.maxY - rect.height * 0.25))
+            ctx.addLine(to: CGPoint(x: rect.maxX - rect.width * 0.15, y: rect.minY + rect.height * 0.3))
+            ctx.strokePath()
+        }
+    }
+
     static func gear(size: CGFloat = 24) -> UIImage {
         render(size: size) { ctx, rect in
             let center = CGPoint(x: rect.midX, y: rect.midY)
@@ -102,6 +115,39 @@ enum IconFactory {
             ctx.setLineWidth(lineWidth)
             ctx.addEllipse(in: rect.insetBy(dx: lineWidth, dy: lineWidth))
             ctx.strokePath()
+        }
+    }
+
+    static func eye(size: CGFloat = 24, open: Bool = true) -> UIImage {
+        render(size: size) { ctx, rect in
+            let lineWidth = rect.width * 0.08
+            ctx.setLineWidth(lineWidth)
+            ctx.setLineCap(.round)
+            ctx.setLineJoin(.round)
+
+            let eyePath = UIBezierPath()
+            eyePath.move(to: CGPoint(x: rect.minX + rect.width * 0.05, y: rect.midY))
+            eyePath.addQuadCurve(
+                to: CGPoint(x: rect.maxX - rect.width * 0.05, y: rect.midY),
+                controlPoint: CGPoint(x: rect.midX, y: rect.minY + rect.height * 0.08)
+            )
+            eyePath.addQuadCurve(
+                to: CGPoint(x: rect.minX + rect.width * 0.05, y: rect.midY),
+                controlPoint: CGPoint(x: rect.midX, y: rect.maxY - rect.height * 0.08)
+            )
+            ctx.addPath(eyePath.cgPath)
+            ctx.strokePath()
+
+            let pupilRadius = rect.width * 0.12
+            ctx.setFillColor(UIColor.black.cgColor)
+            ctx.addEllipse(in: CGRect(x: rect.midX - pupilRadius, y: rect.midY - pupilRadius, width: pupilRadius * 2, height: pupilRadius * 2))
+            ctx.fillPath()
+
+            if !open {
+                ctx.move(to: CGPoint(x: rect.minX + rect.width * 0.1, y: rect.maxY - rect.height * 0.1))
+                ctx.addLine(to: CGPoint(x: rect.maxX - rect.width * 0.1, y: rect.minY + rect.height * 0.1))
+                ctx.strokePath()
+            }
         }
     }
 

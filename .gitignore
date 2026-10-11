@@ -18,5 +18,10 @@ DerivedData/
 .env
 SECRETS.swift
 
+# Local reference material (screenshots + Proxyman .har packet captures used to
+# reverse-engineer the real app's UI and protocol) — contains real auth tokens,
+# account email, and photos of the user's actual home/room names. Never commit.
+OrigAppImages/
+
 # Simulator / build logs
 *.log

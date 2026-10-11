@@ -19,6 +19,7 @@ final class DeviceListViewController: UIViewController, UITableViewDataSource, U
 
     private let tableView = UITableView(frame: .zero, style: .plain)
     private let emptyLabel = UILabel()
+    private var allDevicesControl: AllDevicesControlView!
 
     private var visibleDevices: [FanDevice] {
         guard selectedTabIndex > 0, selectedTabIndex - 1 < groupStore.groups.count else { return store.devices }
@@ -73,16 +74,11 @@ final class DeviceListViewController: UIViewController, UITableViewDataSource, U
         menuButton.addTarget(self, action: #selector(menuTapped), for: .touchUpInside)
         menuButton.translatesAutoresizingMaskIntoConstraints = false
 
-        let pinwheel = FanSyncPinwheelView()
-        pinwheel.color = .white
-        pinwheel.translatesAutoresizingMaskIntoConstraints = false
-
-        let ring = UIView()
-        ring.layer.borderColor = UIColor.white.cgColor
-        ring.layer.borderWidth = 1.5
-        ring.layer.cornerRadius = 17
-        ring.translatesAutoresizingMaskIntoConstraints = false
-        ring.addSubview(pinwheel)
+        // LogoMark's image asset already includes the circle ring, matching the real
+        // app's header logo exactly.
+        let logoMark = FanSyncLogoMarkView()
+        logoMark.color = .white
+        logoMark.translatesAutoresizingMaskIntoConstraints = false
 
         let addButton = UIButton(type: .system)
         addButton.setImage(IconFactory.plus(), for: .normal)
@@ -91,7 +87,7 @@ final class DeviceListViewController: UIViewController, UITableViewDataSource, U
         addButton.translatesAutoresizingMaskIntoConstraints = false
 
         header.addSubview(menuButton)
-        header.addSubview(ring)
+        header.addSubview(logoMark)
         header.addSubview(addButton)
 
         NSLayoutConstraint.activate([
@@ -103,14 +99,10 @@ final class DeviceListViewController: UIViewController, UITableViewDataSource, U
             menuButton.leadingAnchor.constraint(equalTo: header.leadingAnchor, constant: 20),
             menuButton.bottomAnchor.constraint(equalTo: header.bottomAnchor, constant: -16),
 
-            ring.centerXAnchor.constraint(equalTo: header.centerXAnchor),
-            ring.bottomAnchor.constraint(equalTo: header.bottomAnchor, constant: -12),
-            ring.widthAnchor.constraint(equalToConstant: 34),
-            ring.heightAnchor.constraint(equalToConstant: 34),
-            pinwheel.centerXAnchor.constraint(equalTo: ring.centerXAnchor),
-            pinwheel.centerYAnchor.constraint(equalTo: ring.centerYAnchor),
-            pinwheel.widthAnchor.constraint(equalToConstant: 20),
-            pinwheel.heightAnchor.constraint(equalToConstant: 20),
+            logoMark.centerXAnchor.constraint(equalTo: header.centerXAnchor),
+            logoMark.bottomAnchor.constraint(equalTo: header.bottomAnchor, constant: -12),
+            logoMark.widthAnchor.constraint(equalToConstant: 34),
+            logoMark.heightAnchor.constraint(equalToConstant: 34),
 
             addButton.trailingAnchor.constraint(equalTo: header.trailingAnchor, constant: -20),
             addButton.bottomAnchor.constraint(equalTo: header.bottomAnchor, constant: -16)
@@ -214,6 +206,11 @@ final class DeviceListViewController: UIViewController, UITableViewDataSource, U
         refresh.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
         tableView.refreshControl = refresh
 
+        allDevicesControl = AllDevicesControlView(store: store)
+        allDevicesControl.devicesProvider = { [weak self] in self?.visibleDevices ?? [] }
+        allDevicesControl.onExpandedChange = { [weak self] in self?.layoutTableHeader() }
+        installTableHeader()
+
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: tabsScroll.bottomAnchor),
@@ -221,6 +218,39 @@ final class DeviceListViewController: UIViewController, UITableViewDataSource, U
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+
+    /// UITableView's `tableHeaderView` doesn't auto-resize when its content's intrinsic
+    /// height changes (a longstanding UIKit quirk), so the expandable AllDevicesControlView
+    /// is wrapped in a plain container and its frame is recalculated manually whenever the
+    /// control expands/collapses.
+    private func installTableHeader() {
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 1))
+        allDevicesControl.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(allDevicesControl)
+        NSLayoutConstraint.activate([
+            allDevicesControl.topAnchor.constraint(equalTo: container.topAnchor, constant: 12),
+            allDevicesControl.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -12),
+            allDevicesControl.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 16),
+            allDevicesControl.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -16)
+        ])
+        tableView.tableHeaderView = container
+        layoutTableHeader()
+    }
+
+    private func layoutTableHeader() {
+        guard let header = tableView.tableHeaderView else { return }
+        let targetWidth = tableView.bounds.width > 0 ? tableView.bounds.width : view.bounds.width
+        let fittingHeight = header.systemLayoutSizeFitting(
+            CGSize(width: targetWidth, height: UIView.layoutFittingCompressedSize.height),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        ).height
+        var frame = header.frame
+        frame.size.width = targetWidth
+        frame.size.height = fittingHeight
+        header.frame = frame
+        tableView.tableHeaderView = header
     }
 
     private func buildEmptyState() {

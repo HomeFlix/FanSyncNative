@@ -22,7 +22,7 @@ targets:
       path: FanSyncNativeUIKit/Info.plist
       properties:
         UILaunchScreen: {}
-        CFBundleDisplayName: FanSync
+        CFBundleDisplayName: fanSync WiFi
         UIRequiresFullScreen: true
     settings:
       base:
@@ -32,3 +32,9 @@ targets:
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         MARKETING_VERSION: "1.0"
         CURRENT_PROJECT_VERSION: "1"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        CODE_SIGN_STYLE: Automatic
+        # DEVELOPMENT_TEAM intentionally left unset here — it's tied to
+        # whichever personal Apple ID is signed into Xcode's Accounts on
+        # the machine building this, and must be picked once from the
+        # Signing & Capabilities "Team" dropdown in Xcode's GUI.

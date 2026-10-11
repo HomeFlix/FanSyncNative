@@ -6,8 +6,8 @@ import UIKit
 final class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
-    let store = FanSyncStore()
     let groupStore = DeviceGroupStore()
+    lazy var store = FanSyncStore(groupStore: groupStore)
 
     func application(
         _ application: UIApplication,

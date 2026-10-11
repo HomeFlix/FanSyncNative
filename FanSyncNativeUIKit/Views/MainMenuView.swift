@@ -26,16 +26,17 @@ final class MainMenuView: UIView {
     }
 
     private func buildLayout() {
-        let pinwheel = FanSyncPinwheelView()
-        pinwheel.color = FanSyncTheme.eggplant
-        pinwheel.translatesAutoresizingMaskIntoConstraints = false
+        // Purple header strip with the white F+ring logo, matching the main device
+        // list's header styling.
+        let header = UIView()
+        header.backgroundColor = FanSyncTheme.eggplant
+        header.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(header)
 
-        let ring = UIView()
-        ring.layer.borderColor = FanSyncTheme.eggplant.cgColor
-        ring.layer.borderWidth = 1.5
-        ring.layer.cornerRadius = 23
-        ring.translatesAutoresizingMaskIntoConstraints = false
-        ring.addSubview(pinwheel)
+        let logoMark = FanSyncLogoMarkView()
+        logoMark.color = .white
+        logoMark.translatesAutoresizingMaskIntoConstraints = false
+        header.addSubview(logoMark)
 
         let rows = UIStackView(arrangedSubviews: [
             menuRow(title: "Home", chevron: true) { [weak self] in self?.onSelect?(.home) },
@@ -57,23 +58,22 @@ final class MainMenuView: UIView {
         footer.spacing = 4
         footer.translatesAutoresizingMaskIntoConstraints = false
 
-        ring.translatesAutoresizingMaskIntoConstraints = false
         rows.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(ring)
         addSubview(rows)
         addSubview(footer)
 
         NSLayoutConstraint.activate([
-            ring.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 20),
-            ring.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            ring.widthAnchor.constraint(equalToConstant: 46),
-            ring.heightAnchor.constraint(equalToConstant: 46),
-            pinwheel.centerXAnchor.constraint(equalTo: ring.centerXAnchor),
-            pinwheel.centerYAnchor.constraint(equalTo: ring.centerYAnchor),
-            pinwheel.widthAnchor.constraint(equalToConstant: 26),
-            pinwheel.heightAnchor.constraint(equalToConstant: 26),
+            header.topAnchor.constraint(equalTo: topAnchor),
+            header.leadingAnchor.constraint(equalTo: leadingAnchor),
+            header.trailingAnchor.constraint(equalTo: trailingAnchor),
+            header.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 90),
 
-            rows.topAnchor.constraint(equalTo: ring.bottomAnchor, constant: 20),
+            logoMark.leadingAnchor.constraint(equalTo: header.leadingAnchor, constant: 20),
+            logoMark.bottomAnchor.constraint(equalTo: header.bottomAnchor, constant: -16),
+            logoMark.widthAnchor.constraint(equalToConstant: 46),
+            logoMark.heightAnchor.constraint(equalToConstant: 46),
+
+            rows.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 20),
             rows.leadingAnchor.constraint(equalTo: leadingAnchor),
             rows.trailingAnchor.constraint(equalTo: trailingAnchor),
 

@@ -1,6 +1,6 @@
 import UIKit
 
-final class MyGroupsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+final class MyGroupsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITableViewDragDelegate, UITableViewDropDelegate {
     private let store: FanSyncStore
     private let groupStore: DeviceGroupStore
     private var groupsObserverToken: UUID?
@@ -28,7 +28,12 @@ final class MyGroupsViewController: UIViewController, UITableViewDataSource, UIT
         tableView.backgroundColor = .clear
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "row")
+        tableView.dragDelegate = self
+        tableView.dropDelegate = self
+        tableView.dragInteractionEnabled = true
+        tableView.register(GroupDeviceCell.self, forCellReuseIdentifier: GroupDeviceCell.reuseId)
+        tableView.sectionHeaderHeight = 64
+        tableView.estimatedSectionHeaderHeight = 64
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
@@ -75,23 +80,26 @@ final class MyGroupsViewController: UIViewController, UITableViewDataSource, UIT
         return ungroupedIds.count
     }
 
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        section < groupStore.groups.count ? groupStore.groups[section].name : "Device Not in Group"
-    }
-
     func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         section == groupStore.groups.count ? "Drag here to add" : nil
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard section < groupStore.groups.count else { return nil }
+        guard section < groupStore.groups.count else {
+            let label = UILabel()
+            label.text = "Device Not in Group"
+            label.font = .systemFont(ofSize: 20, weight: .bold)
+            label.textColor = FanSyncTheme.onLabel
+            label.textAlignment = .center
+            return label
+        }
         let group = groupStore.groups[section]
 
         let container = UIView()
         let label = UILabel()
         label.text = group.name
-        label.font = .systemFont(ofSize: 15)
-        label.textColor = FanSyncTheme.secondaryLabel
+        label.font = .systemFont(ofSize: 26, weight: .regular)
+        label.textColor = FanSyncTheme.eggplant
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
 
@@ -148,22 +156,62 @@ final class MyGroupsViewController: UIViewController, UITableViewDataSource, UIT
         present(alert, animated: true)
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "row", for: indexPath)
-        let deviceId: String
+    private func deviceId(at indexPath: IndexPath) -> String {
         if indexPath.section < groupStore.groups.count {
-            deviceId = groupStore.groups[indexPath.section].deviceIds[indexPath.row]
-        } else {
-            deviceId = ungroupedIds[indexPath.row]
+            return groupStore.groups[indexPath.section].deviceIds[indexPath.row]
         }
-        cell.textLabel?.text = store.devices.first(where: { $0.id == deviceId })?.displayName ?? deviceId
-        cell.textLabel?.font = .systemFont(ofSize: 20)
-        cell.accessoryView = {
-            let iv = UIImageView(image: IconFactory.hamburger(size: 20))
-            iv.tintColor = FanSyncTheme.onLabel
-            return iv
-        }()
-        cell.selectionStyle = .none
+        return ungroupedIds[indexPath.row]
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: GroupDeviceCell.reuseId, for: indexPath) as! GroupDeviceCell
+        let id = deviceId(at: indexPath)
+        cell.configure(title: store.devices.first(where: { $0.id == id })?.displayName ?? id)
         return cell
+    }
+
+    // MARK: - Drag and drop (move a device between groups, or to/from "ungrouped")
+
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        let id = deviceId(at: indexPath)
+        let provider = NSItemProvider(object: id as NSString)
+        let item = UIDragItem(itemProvider: provider)
+        item.localObject = id
+        return [item]
+    }
+
+    func tableView(_ tableView: UITableView, canHandle session: UIDropSession) -> Bool {
+        session.localDragSession != nil
+    }
+
+    func tableView(_ tableView: UITableView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
+        UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+    }
+
+    func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
+        guard let item = coordinator.items.first,
+              let sourceIndexPath = item.sourceIndexPath,
+              let deviceId = item.dragItem.localObject as? String
+        else { return }
+
+        let destinationSection = coordinator.destinationIndexPath?.section ?? (groupStore.groups.count)
+
+        // Moving within the same group, or within "ungrouped" — no server call needed,
+        // just a local reorder (membership didn't change). Real reordering within a
+        // group isn't synced (the server's set_group device order isn't shown to carry
+        // meaning in the reference protocol), so this is a no-op beyond the UI move.
+        guard destinationSection != sourceIndexPath.section else { return }
+
+        if sourceIndexPath.section < groupStore.groups.count {
+            let sourceGroup = groupStore.groups[sourceIndexPath.section]
+            groupStore.removeDevice(deviceId, from: sourceGroup)
+        }
+        if destinationSection < groupStore.groups.count {
+            let destinationGroup = groupStore.groups[destinationSection]
+            groupStore.addDevice(deviceId, to: destinationGroup)
+        }
+        // Dropping into "ungrouped" needs no addDevice call — removing from the source
+        // group is sufficient, since ungroupedDeviceIds is derived from what's NOT in
+        // any group rather than being its own tracked list.
     }
 }
