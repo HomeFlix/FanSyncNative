@@ -28,7 +28,6 @@
 		8711B829AA1F2F7444617541 /* FanSyncLogoMarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423D051EEAF5A1F4DB7051CB /* FanSyncLogoMarkView.swift */; };
 		ACBA57617425B22567917B90 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A482DF1B675571F8726A8F /* RootViewController.swift */; };
 		BA6AAD5B8C283915F11C2D36 /* ScheduleListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A18EB6AFC3BEE9B4C7039E6 /* ScheduleListViewController.swift */; };
-		BD7F9222DE22C1DCB4C9EE04 /* RawStreamDiagnostic.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC7350B5DD8998B53F814FE /* RawStreamDiagnostic.swift */; };
 		C0F4750153177207560D7EE7 /* SupportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE721ED0C6AAD41BCCB5A4D /* SupportViewController.swift */; };
 		C2C789335E27FD42FB036CCE /* AllDevicesControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4796C13B83C42FF101850DCA /* AllDevicesControlView.swift */; };
 		C300B47E6F12C61FCD87B365 /* FanSyncAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400BAF6E14A2B1EBB31C77E /* FanSyncAPI.swift */; };
@@ -74,7 +73,6 @@
 		C4362E65D99FB768A1AEBBB5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C98544BB371D305BC4EA0F96 /* FanSyncWebSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FanSyncWebSocket.swift; sourceTree = "<group>"; };
 		DAEFE0317335308570944FBF /* GroupDeviceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDeviceCell.swift; sourceTree = "<group>"; };
-		ECC7350B5DD8998B53F814FE /* RawStreamDiagnostic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawStreamDiagnostic.swift; sourceTree = "<group>"; };
 		F0F9BF7A70D315F3E9D41EB1 /* DeviceSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSettingsViewController.swift; sourceTree = "<group>"; };
 		F30D96F1EC2F07BDD0A194BB /* FanSyncModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FanSyncModels.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -163,7 +161,6 @@
 			children = (
 				8400BAF6E14A2B1EBB31C77E /* FanSyncAPI.swift */,
 				C98544BB371D305BC4EA0F96 /* FanSyncWebSocket.swift */,
-				ECC7350B5DD8998B53F814FE /* RawStreamDiagnostic.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -295,7 +292,6 @@
 				11355B68EF56BA2C979E123F /* MyAccountViewController.swift in Sources */,
 				6957F99A79DA7CBE68FC3D1A /* MyGroupsViewController.swift in Sources */,
 				7C97C28AE157D881581B301F /* Observable.swift in Sources */,
-				BD7F9222DE22C1DCB4C9EE04 /* RawStreamDiagnostic.swift in Sources */,
 				ACBA57617425B22567917B90 /* RootViewController.swift in Sources */,
 				BA6AAD5B8C283915F11C2D36 /* ScheduleListViewController.swift in Sources */,
 				56830E8617519D8B0E38A98C /* SettingsViewController.swift in Sources */,
