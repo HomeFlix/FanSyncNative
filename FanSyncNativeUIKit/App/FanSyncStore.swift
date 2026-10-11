@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 final class FanSyncStore {
     enum SessionState: Equatable {
@@ -36,6 +37,33 @@ final class FanSyncStore {
 
     init(groupStore: DeviceGroupStore) {
         self.groupStore = groupStore
+        // iOS suspends/drops the WebSocket whenever the app is backgrounded (there's
+        // no UIBackgroundModes entry for persistent networking, deliberately — a
+        // smart-home control app doesn't need one). Without this, returning to the
+        // app after even briefly switching away or locking the screen left it stuck
+        // showing stale cached state with a dead socket — any control would silently
+        // fail until the user force-quit and relaunched. That's what was actually
+        // behind "login times out fairly fast" (not a Remember Me/token-expiry
+        // issue — the cached token itself is valid for 30 days per the real app's
+        // own protocol).
+        NotificationCenter.default.addObserver(
+            self, selector: #selector(applicationWillEnterForeground),
+            name: UIApplication.willEnterForegroundNotification, object: nil
+        )
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    @objc private func applicationWillEnterForeground() {
+        // Don't interrupt an in-flight login/connect attempt, but DO re-verify a
+        // seemingly-".ready" session — iOS can silently drop the WebSocket while the
+        // app is suspended without ever running our onDisconnect handler (the process
+        // itself isn't executing code during suspension), so `state` can still read
+        // .ready from before backgrounding even though the underlying socket is dead.
+        guard state != .connecting, state != .loggingIn else { return }
+        restoreSession()
     }
 
     // MARK: - Startup
@@ -94,6 +122,13 @@ final class FanSyncStore {
     }
 
     private func connectAndLoad(token: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        // Close out any previous socket before starting a new one — relevant now that
+        // connectAndLoad can be re-entered from applicationWillEnterForeground while a
+        // prior (possibly still-technically-alive) socket exists, not just on first
+        // login. Without this, re-entering here could leak the old connection.
+        ws?.disconnect()
+        ws = nil
+
         state = .connecting
         self.token = token
 

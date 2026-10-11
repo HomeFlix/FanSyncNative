@@ -55,6 +55,18 @@ final class DeviceListViewController: UIViewController, UITableViewDataSource, U
         reload()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // DeviceListViewController has its own custom purple header, so the shared
+        // UINavigationController's real nav bar must stay hidden here — but secondary
+        // screens pushed on top of it (My Groups, Settings, etc.) turn it back on via
+        // setUpEggplantNavBar for their own native title bar, and popping back to
+        // this screen doesn't automatically restore the previous hidden state. Without
+        // this, that left a second purple bar stacked above this screen's own header
+        // after visiting My Groups and tapping Back.
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+
     deinit {
         if let token = devicesObserverToken { store.devicesDidChange.removeObserver(token) }
         if let token = groupsObserverToken { groupStore.didChange.removeObserver(token) }
