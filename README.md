@@ -25,9 +25,8 @@ WebSocket support comes from [Starscream](https://github.com/daltoniam/Starscrea
 
 ## Project structure
 
-- `FanSyncNativeUIKit/` — the real, actively developed app target (iOS 12.0)
-- `FanSyncNative/` — an earlier SwiftUI prototype, kept only as historical reference; not built or maintained
-- `project-uikit.yml` — [XcodeGen](https://github.com/yonaskolb/XcodeGen) spec for the UIKit target; the checked-in `.xcodeproj` is generated from this
+- `FanSyncNativeUIKit/` — the app target (iOS 12.0)
+- `project-uikit.yml` — [XcodeGen](https://github.com/yonaskolb/XcodeGen) spec for the target; the checked-in `.xcodeproj` is generated from this
 - `OrigAppImages/` — local-only reference material (screenshots, packet captures) used during development; gitignored, since it contains real account tokens
 
 ## Building
