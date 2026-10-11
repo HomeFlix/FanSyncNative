@@ -21,7 +21,7 @@ targets:
     info:
       path: FanSyncNativeUIKit/Info.plist
       properties:
-        UILaunchScreen: {}
+        UILaunchStoryboardName: LaunchScreen
         CFBundleDisplayName: fanSync WiFi
         UIRequiresFullScreen: true
     settings:
@@ -29,7 +29,17 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.fansyncnative.uikit
         TARGETED_DEVICE_FAMILY: "1,2"
         GENERATE_INFOPLIST_FILE: YES
-        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        # UILaunchScreen/INFOPLIST_KEY_UILaunchScreen_Generation is an iOS 13+
+        # mechanism. On iOS 12 it does nothing, and WITHOUT a real launch
+        # screen (UILaunchStoryboardName, set above) the OS silently falls
+        # back to legacy compatibility mode — rendering the whole app in a
+        # fixed 320x480 (iPhone 4-era) point coordinate space regardless of
+        # the real device's screen size. Confirmed via a device console log
+        # on an iPhone 6 (view.bounds reported as 320x480 instead of the
+        # real 375x667), which was the actual root cause of a keyboard-
+        # covers-the-login-fields bug that looked at first like a scroll
+        # view/keyboard-avoidance bug. Do not reintroduce UILaunchScreen: {}
+        # as the launch mechanism for this iOS-12-targeting app.
         MARKETING_VERSION: "1.0"
         CURRENT_PROJECT_VERSION: "1"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
